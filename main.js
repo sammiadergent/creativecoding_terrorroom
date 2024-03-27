@@ -7,16 +7,6 @@ const videoElement = document.querySelector("#mainVideo");
 // Create a new WebSocket.
 const socket = new WebSocket("ws://192.168.100.1:8080");
 
-const states = {
-	intro: "intro",
-	main: "main",
-	jumpscare: "jumpscare",
-	stop: "stop",
-	outro: "outro",
-	await: "await",
-};
-
-let state = states.intro;
 
 // Connection opened
 socket.addEventListener("open", (event) => {
@@ -40,6 +30,26 @@ socket.addEventListener("message", (event) => {
 	console.log("Message from server: ", decodedMessage);
 	if (decodedMessage.type === "select") {
 		introCounter++;
+		if (introCounter > 0) {
+			const prevElement = document.querySelector(`.intro_${introCounter - 1}`);
+			if (prevElement) {
+				prevElement.classList.add("invisable");
+			}
+		}
+
+		const currentElement = document.querySelector(`.intro_${introCounter}`);
+		if (currentElement) {
+			currentElement.classList.remove("invisable");
+		}
+
+		if (introCounter === 6) {
+			const colors = { ASS: "red", HSP: "green", ADHD: "yellow" };
+			if (gamemode) {
+				const currentDivElement = document.getElementById(
+					`colorDiv${colorNumber}`,
+				).style.backgroundColor = colors[gamemode];
+			}
+		}
 		console.log("introCounter: ", introCounter);
 		if (introCounter === 6) {
 			switch (decodedMessage.data.color) {
@@ -53,75 +63,23 @@ socket.addEventListener("message", (event) => {
 					gamemode = "ASS";
 			}
 
-			state = states.main;
+			//we starten de video
+
+			videoElement.classList.remove("invisable")
+			const video = videoElement.querySelector("video")
+			video.muted = true
+			video.play()
 		}
+
+		
 	} else if (decodedMessage.type === "fail") {
-		state = states.jumpscare;
+		console.log("JUMPSCARE")
+		if ((gamemode = ADHD)) {
+
+		}
 	}
 
 });
-
-
-
-function mainLoop() {
-	switch (state) {
-		case states.intro:
-			if (introCounter > 0) {
-				const prevElement = document.querySelector(`.intro_${introCounter - 1}`);
-				if (prevElement) {
-					prevElement.classList.add("invisable");
-				}
-			}
-
-			const currentElement = document.querySelector(`.intro_${introCounter}`);
-			if (currentElement) {
-				currentElement.classList.remove("invisable");
-			}
-
-			if (introCounter === 6) {
-				const colors = { ASS: "red", HSP: "green", ADHD: "yellow" };
-				if (gamemode) {
-					const currentDivElement = document.getElementById(
-						`colorDiv${colorNumber}`,
-					).style.backgroundColor = colors[gamemode];
-				}
-			}
-
-			break;
-		case states.main:
-			console.log("uwu")
-			if (videoElement) {
-				videoElement.classList.remove("invisable");
-				videoElement.muted = true
-				videoElement.play();
-			}
-			break;
-		case states.jumpscare:
-			console.log("JUMPSCARE")
-			if ((gamemode = ADHD)) {
-
-			}
-			break;
-		case states.stop:
-			// Code for stop state
-			break;
-		case states.outro:
-			// Code for outro state
-			break;
-		case states.await:
-			// Code for await state
-			break;
-		default:
-		// Code for unknown state
-	}
-
-	requestAnimationFrame(mainLoop)
-}
-
-
-
-mainLoop()
-
 
 
 
