@@ -21,36 +21,37 @@ socket.addEventListener("error", (event) => {
 });
 
 // Listen for messages
-socket.addEventListener("message"),
-  (event) => {
+socket.addEventListener("message",
+(event) => {
     const decodedMessage = JSON.parse(event.data);
 
     console.log("Message from server: ", decodedMessage);
 
     if (decodedMessage.type === "select") {
-      if (introCounter > 5) {
+      if (introCounter > 0) {
         const prevElement = document.querySelector(
           `.intro_${introCounter - 1}`,
         );
         if (prevElement) {
-          prevElement.classList.add("invisible");
+          prevElement.classList.add("invisable");
         }
       }
 
       const currentElement = document.querySelector(`.intro_${introCounter}`);
       if (currentElement) {
-        currentElement.classList.remove("invisible");
+        currentElement.classList.remove("invisable");
         introCounter++;
       }
       // when we are on intro 5 we have 3 options that each have a color trigger
-      if (introCounter === 5) {
-        if (data.type.startsWith("color.")) {
-          const colorNumber = data.type.split(".")[1];
+      if (introCounter === 6) {
+		const colors = ["red", "green", "yellow"];
+        if (decodedMessage.data.color) {
+          const colorNumber = decodedMessage.data.color;
           const divElement = document.getElementById(`colorDiv${colorNumber}`);
           if (divElement) {
-            divElement.style.backgroundColor = data.color;
+            divElement.style.backgroundColor = colors[colorNumber - 1];
           }
         }
       }
     }
-  };
+  });
