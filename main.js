@@ -6,6 +6,17 @@ let gamemode = 0;
 // Create a new WebSocket.
 const socket = new WebSocket("ws://192.168.100.1:8080");
 
+const states = {
+  intro: "intro",
+  main: "main",
+  jumpscare: "jumpscare",
+  stop: "stop",
+  outro: "outro",
+  await: "await",
+};
+
+let state = states.intro;
+
 // Connection opened
 socket.addEventListener("open", (event) => {
   // socket.send("Hello Server!");
@@ -64,15 +75,14 @@ socket.addEventListener("message", (event) => {
     }
     if (nextDivElement) {
       nextDivElement.style.display = "block"; // Show the next div
-      const videoElement = nextDivElement.querySelector("video");
+      const videoElement = document.querySelector("video");
       if (videoElement) {
         videoElement.style.display = "block"; // Show the video
         videoElement.play();
-        console.log("Playing video");
       }
       let currentFailIndex = 1; // Initialize the fail index
 
-      if (decodedMessage.data.fail) {
+      if (decodedMessage.type.fail) {
         const mainVideoElement = document.querySelector("#mainVideo");
         const failVideoElement = document.querySelector(
           `#failVideo${gamemode}_${currentFailIndex}`,
@@ -94,3 +104,60 @@ socket.addEventListener("message", (event) => {
     }
   }
 });
+
+///////////////
+// Listen for messages
+const decodedMessage = JSON.parse(event.data);
+const videoElement = document.querySelector("video");
+
+console.log("Message from server: ", decodedMessage);
+
+function mainLoop() {
+  switch (state) {
+    case states.intro:
+      introCounter++;
+      if (introCounter === 6) {
+        const colors = ["red", "green", "yellow"];
+        if (decodedMessage.data.color) {
+          const colorNumber = decodedMessage.data.color;
+          const currentDivElement = document.getElementById(
+            `colorDiv${colorNumber}`,
+          );
+        }
+        switch (decodedMessage.data.color) {
+          case 2:
+            gameMode = "ADHD";
+            break;
+          case 3:
+            gameMode = "HSP";
+            break;
+          case 1:
+            gameMode = "ASS";
+        }
+        state = states.main;
+      }
+
+      break;
+    case states.main:
+      if (videoElement) {
+        videoElement.style.display = "block"; // Show the video
+        videoElement.play();
+      }
+      break;
+    case states.jumpscare:
+      if ((gamemode = ADHD)) {
+      }
+      break;
+    case states.stop:
+      // Code for stop state
+      break;
+    case states.outro:
+      // Code for outro state
+      break;
+    case states.await:
+      // Code for await state
+      break;
+    default:
+    // Code for unknown state
+  }
+}
