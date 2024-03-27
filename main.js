@@ -41,6 +41,9 @@ socket.addEventListener("message", (event) => {
       introCounter++;
     }
     // when we are on intro 5 we have 3 options that each have a color trigger
+    const nextDivElement = document.getElementById(
+      `colorDiv${colorNumber + 1}`,
+    );
     if (introCounter === 6) {
       const colors = ["red", "green", "yellow"];
       if (decodedMessage.data.color) {
@@ -48,9 +51,7 @@ socket.addEventListener("message", (event) => {
         const currentDivElement = document.getElementById(
           `colorDiv${colorNumber}`,
         );
-        const nextDivElement = document.getElementById(
-          `colorDiv${colorNumber + 1}`,
-        );
+
         if (currentDivElement) {
           currentDivElement.style.backgroundColor = colors[colorNumber - 1];
           currentDivElement.style.display = "none"; // Hide the current div
@@ -74,7 +75,7 @@ socket.addEventListener("message", (event) => {
       if (decodedMessage.data.fail) {
         const mainVideoElement = document.querySelector("#mainVideo");
         const failVideoElement = document.querySelector(
-          `#failVideo${currentFailIndex}`,
+          `#failVideo${gamemode}_${currentFailIndex}`,
         );
         if (mainVideoElement && failVideoElement) {
           mainVideoElement.pause(); // Pause the main video
