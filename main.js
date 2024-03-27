@@ -1,163 +1,193 @@
 import "./style.css";
 
-let introCounter = 1;
+let introCounter = 0;
 let gamemode = 0;
+const videoElement = document.querySelector("#mainVideo");
 
 // Create a new WebSocket.
 const socket = new WebSocket("ws://192.168.100.1:8080");
 
 const states = {
-  intro: "intro",
-  main: "main",
-  jumpscare: "jumpscare",
-  stop: "stop",
-  outro: "outro",
-  await: "await",
+	intro: "intro",
+	main: "main",
+	jumpscare: "jumpscare",
+	stop: "stop",
+	outro: "outro",
+	await: "await",
 };
 
 let state = states.intro;
 
 // Connection opened
 socket.addEventListener("open", (event) => {
-  // socket.send("Hello Server!");
+	// socket.send("Hello Server!");
 });
 
 // Connection closed
 socket.addEventListener("close", (event) => {
-  console.log("Server connection closed: ", event.code);
+	console.log("Server connection closed: ", event.code);
 });
 
 // Connection error
 socket.addEventListener("error", (event) => {
-  console.error("WebSocket error: ", event);
+	console.error("WebSocket error: ", event);
 });
 
 // Listen for messages
 socket.addEventListener("message", (event) => {
-  const decodedMessage = JSON.parse(event.data);
+	const decodedMessage = JSON.parse(event.data);
 
-  console.log("Message from server: ", decodedMessage);
+	console.log("Message from server: ", decodedMessage);
+	if (decodedMessage.type === "select") {
+		introCounter++;
+		console.log("introCounter: ", introCounter);
+		if (introCounter === 6) {
+			switch (decodedMessage.data.color) {
+				case 2:
+					gamemode = "ADHD";
+					break;
+				case 3:
+					gamemode = "HSP";
+					break;
+				case 1:
+					gamemode = "ASS";
+			}
 
-  if (decodedMessage.type === "select") {
-    if (introCounter > 0) {
-      const prevElement = document.querySelector(`.intro_${introCounter - 1}`);
-      if (prevElement) {
-        prevElement.classList.add("invisable");
-      }
-    }
+			state = states.main;
+		}
+	} else if (decodedMessage.type === "fail") {
+		state = states.jumpscare;
+	}
 
-    const currentElement = document.querySelector(`.intro_${introCounter}`);
-    if (currentElement) {
-      currentElement.classList.remove("invisable");
-      introCounter++;
-    }
-    // when we are on intro 5 we have 3 options that each have a color trigger
-    const nextDivElement = document.getElementById(
-      `colorDiv${colorNumber + 1}`,
-    );
-    if (introCounter === 6) {
-      const colors = ["red", "green", "yellow"];
-      if (decodedMessage.data.color) {
-        const colorNumber = decodedMessage.data.color;
-        const currentDivElement = document.getElementById(
-          `colorDiv${colorNumber}`,
-        );
-
-        if (currentDivElement) {
-          currentDivElement.style.backgroundColor = colors[colorNumber - 1];
-          currentDivElement.style.display = "none"; // Hide the current div
-          gamemode = colorNumber;
-        }
-        if (nextDivElement) {
-          nextDivElement.style.display = "block"; // Show the next div
-        }
-      }
-    }
-    if (nextDivElement) {
-      nextDivElement.style.display = "block"; // Show the next div
-      const videoElement = document.querySelector("video");
-      if (videoElement) {
-        videoElement.style.display = "block"; // Show the video
-        videoElement.play();
-      }
-      let currentFailIndex = 1; // Initialize the fail index
-
-      if (decodedMessage.type.fail) {
-        const mainVideoElement = document.querySelector("#mainVideo");
-        const failVideoElement = document.querySelector(
-          `#failVideo${gamemode}_${currentFailIndex}`,
-        );
-        if (mainVideoElement && failVideoElement) {
-          mainVideoElement.pause(); // Pause the main video
-          failVideoElement.style.display = "block"; // Show the fail video
-          failVideoElement.play(); // Play the fail video
-
-          failVideoElement.addEventListener("ended", () => {
-            failVideoElement.style.display = "none"; // Hide the fail video
-            mainVideoElement.play(); // Resume the main video
-
-            // Increment the fail index, reset to 1 if it exceeds 4
-            currentFailIndex = (currentFailIndex % 4) + 1;
-          });
-        }
-      }
-    }
-  }
 });
 
-///////////////
-// Listen for messages
-const decodedMessage = JSON.parse(event.data);
-const videoElement = document.querySelector("video");
 
-console.log("Message from server: ", decodedMessage);
 
 function mainLoop() {
-  switch (state) {
-    case states.intro:
-      introCounter++;
-      if (introCounter === 6) {
-        const colors = ["red", "green", "yellow"];
-        if (decodedMessage.data.color) {
-          const colorNumber = decodedMessage.data.color;
-          const currentDivElement = document.getElementById(
-            `colorDiv${colorNumber}`,
-          );
-        }
-        switch (decodedMessage.data.color) {
-          case 2:
-            gameMode = "ADHD";
-            break;
-          case 3:
-            gameMode = "HSP";
-            break;
-          case 1:
-            gameMode = "ASS";
-        }
-        state = states.main;
-      }
+	switch (state) {
+		case states.intro:
+			if (introCounter > 0) {
+				const prevElement = document.querySelector(`.intro_${introCounter - 1}`);
+				if (prevElement) {
+					prevElement.classList.add("invisable");
+				}
+			}
 
-      break;
-    case states.main:
-      if (videoElement) {
-        videoElement.style.display = "block"; // Show the video
-        videoElement.play();
-      }
-      break;
-    case states.jumpscare:
-      if ((gamemode = ADHD)) {
-      }
-      break;
-    case states.stop:
-      // Code for stop state
-      break;
-    case states.outro:
-      // Code for outro state
-      break;
-    case states.await:
-      // Code for await state
-      break;
-    default:
-    // Code for unknown state
-  }
+			const currentElement = document.querySelector(`.intro_${introCounter}`);
+			if (currentElement) {
+				currentElement.classList.remove("invisable");
+			}
+
+			if (introCounter === 6) {
+				const colors = { ASS: "red", HSP: "green", ADHD: "yellow" };
+				if (gamemode) {
+					const currentDivElement = document.getElementById(
+						`colorDiv${colorNumber}`,
+					).style.backgroundColor = colors[gamemode];
+				}
+			}
+
+			break;
+		case states.main:
+			console.log("uwu")
+			if (videoElement) {
+				videoElement.classList.remove("invisable");
+				videoElement.muted = true
+				videoElement.play();
+			}
+			break;
+		case states.jumpscare:
+			console.log("JUMPSCARE")
+			if ((gamemode = ADHD)) {
+
+			}
+			break;
+		case states.stop:
+			// Code for stop state
+			break;
+		case states.outro:
+			// Code for outro state
+			break;
+		case states.await:
+			// Code for await state
+			break;
+		default:
+		// Code for unknown state
+	}
+
+	requestAnimationFrame(mainLoop)
 }
+
+
+
+mainLoop()
+
+
+
+
+
+//   if (decodedMessage.type === "select") {
+//     if (introCounter > 0) {
+//       const prevElement = document.querySelector(`.intro_${introCounter - 1}`);
+//       if (prevElement) {
+//         prevElement.classList.add("invisable");
+//       }
+//     }
+
+//     const currentElement = document.querySelector(`.intro_${introCounter}`);
+//     if (currentElement) {
+//       currentElement.classList.remove("invisable");
+//       introCounter++;
+//     }
+//     // when we are on intro 5 we have 3 options that each have a color trigger
+//     const nextDivElement = document.getElementById(
+//       `colorDiv${colorNumber + 1}`,
+//     );
+//     if (introCounter === 6) {
+//       const colors = ["red", "green", "yellow"];
+//       if (decodedMessage.data.color) {
+//         const colorNumber = decodedMessage.data.color;
+//         const currentDivElement = document.getElementById(
+//           `colorDiv${colorNumber}`,
+//         );
+
+//         if (currentDivElement) {
+//           currentDivElement.style.backgroundColor = colors[colorNumber - 1];
+//           currentDivElement.style.display = "none"; // Hide the current div
+//           gamemode = colorNumber;
+//         }
+//         if (nextDivElement) {
+//           nextDivElement.style.display = "block"; // Show the next div
+//         }
+//       }
+//     }
+//     if (nextDivElement) {
+//       nextDivElement.style.display = "block"; // Show the next div
+//       const videoElement = document.querySelector("video");
+//       if (videoElement) {
+//         videoElement.style.display = "block"; // Show the video
+//         videoElement.play();
+//       }
+//       let currentFailIndex = 1; // Initialize the fail index
+
+//       if (decodedMessage.type.fail) {
+//         const mainVideoElement = document.querySelector("#mainVideo");
+//         const failVideoElement = document.querySelector(
+//           `#failVideo${gamemode}_${currentFailIndex}`,
+//         );
+//         if (mainVideoElement && failVideoElement) {
+//           mainVideoElement.pause(); // Pause the main video
+//           failVideoElement.style.display = "block"; // Show the fail video
+//           failVideoElement.play(); // Play the fail video
+
+//           failVideoElement.addEventListener("ended", () => {
+//             failVideoElement.style.display = "none"; // Hide the fail video
+//             mainVideoElement.play(); // Resume the main video
+
+//             // Increment the fail index, reset to 1 if it exceeds 4
+//             currentFailIndex = (currentFailIndex % 4) + 1;
+//           });
+//         }
+//       }
+//     }
+//   }
