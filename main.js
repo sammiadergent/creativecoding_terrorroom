@@ -32,7 +32,7 @@ socket.addEventListener("message", function (event) {
 	console.log(decodedMessage);
 	if (decodedMessage.type === "select") {
 		if(introCounter > 0) {
-			var element = document.getElementsByClassName("intro_" + introCounter - 1)[0];
+			var element = document.getElementsByClassName(`intro_${introCounter-1}`)[0];
 			if(element != undefined) {
 				element.classList.add("invisable");
 			}
