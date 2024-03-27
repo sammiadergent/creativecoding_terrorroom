@@ -1,46 +1,56 @@
 import "./style.css";
 
-let introCounter = 1
+let introCounter = 1;
 
 // Create a new WebSocket.
-var socket = new WebSocket("ws://192.168.100.1:8080");
+const socket = new WebSocket("ws://192.168.100.1:8080");
 
 // Connection opened
-socket.addEventListener("open", function (event) {
-	//socket.send("Hello Server!");
-});
-
-// Listen for messages
-socket.addEventListener("message", function (event) {
-	console.log("Message from server: ", event.data);
+socket.addEventListener("open", (event) => {
+  // socket.send("Hello Server!");
 });
 
 // Connection closed
-socket.addEventListener("close", function (event) {
-	console.log("Server connection closed: ", event.code);
+socket.addEventListener("close", (event) => {
+  console.log("Server connection closed: ", event.code);
 });
 
 // Connection error
-socket.addEventListener("error", function (event) {
-	console.error("WebSocket error: ", event);
+socket.addEventListener("error", (event) => {
+  console.error("WebSocket error: ", event);
 });
 
-//when select message comes in I need to hide the div that is showing called "intro_0" and need to show the div called "intro_1" until intro_5
-socket.addEventListener("message", function (event) {
-	console.log("Message from server: ", event.data);
-	const decodedMessage = JSON.parse(event.data.toString())
-	console.log(decodedMessage);
-	if (decodedMessage.type === "select") {
-		if(introCounter > 0) {
-			var element = document.getElementsByClassName(`intro_${introCounter-1}`)[0];
-			if(element != undefined) {
-				element.classList.add("invisable");
-			}
-		}
-		var element = document.getElementsByClassName("intro_" + introCounter)[0];
-		if(element != undefined) {
-			element.classList.remove("invisable");
-			introCounter++;
-		}
-	}
-});
+// Listen for messages
+socket.addEventListener("message"),
+  (event) => {
+    const decodedMessage = JSON.parse(event.data);
+
+    console.log("Message from server: ", decodedMessage);
+
+    if (decodedMessage.type === "select") {
+      if (introCounter > 5) {
+        const prevElement = document.querySelector(
+          `.intro_${introCounter - 1}`,
+        );
+        if (prevElement) {
+          prevElement.classList.add("invisible");
+        }
+      }
+
+      const currentElement = document.querySelector(`.intro_${introCounter}`);
+      if (currentElement) {
+        currentElement.classList.remove("invisible");
+        introCounter++;
+      }
+      // when we are on intro 5 we have 3 options that each have a color trigger
+      if (introCounter === 5) {
+        if (data.type.startsWith("color.")) {
+          const colorNumber = data.type.split(".")[1];
+          const divElement = document.getElementById(`colorDiv${colorNumber}`);
+          if (divElement) {
+            divElement.style.backgroundColor = data.color;
+          }
+        }
+      }
+    }
+  };
