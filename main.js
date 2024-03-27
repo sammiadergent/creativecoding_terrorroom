@@ -1,6 +1,7 @@
 import "./style.css";
 
 let introCounter = 1;
+let gamemode = 0;
 
 // Create a new WebSocket.
 const socket = new WebSocket("ws://192.168.100.1:8080");
@@ -21,37 +22,74 @@ socket.addEventListener("error", (event) => {
 });
 
 // Listen for messages
-socket.addEventListener("message",
-(event) => {
-    const decodedMessage = JSON.parse(event.data);
+socket.addEventListener("message", (event) => {
+  const decodedMessage = JSON.parse(event.data);
 
-    console.log("Message from server: ", decodedMessage);
+  console.log("Message from server: ", decodedMessage);
 
-    if (decodedMessage.type === "select") {
-      if (introCounter > 0) {
-        const prevElement = document.querySelector(
-          `.intro_${introCounter - 1}`,
+  if (decodedMessage.type === "select") {
+    if (introCounter > 0) {
+      const prevElement = document.querySelector(`.intro_${introCounter - 1}`);
+      if (prevElement) {
+        prevElement.classList.add("invisable");
+      }
+    }
+
+    const currentElement = document.querySelector(`.intro_${introCounter}`);
+    if (currentElement) {
+      currentElement.classList.remove("invisable");
+      introCounter++;
+    }
+    // when we are on intro 5 we have 3 options that each have a color trigger
+    if (introCounter === 6) {
+      const colors = ["red", "green", "yellow"];
+      if (decodedMessage.data.color) {
+        const colorNumber = decodedMessage.data.color;
+        const currentDivElement = document.getElementById(
+          `colorDiv${colorNumber}`,
         );
-        if (prevElement) {
-          prevElement.classList.add("invisable");
+        const nextDivElement = document.getElementById(
+          `colorDiv${colorNumber + 1}`,
+        );
+        if (currentDivElement) {
+          currentDivElement.style.backgroundColor = colors[colorNumber - 1];
+          currentDivElement.style.display = "none"; // Hide the current div
+          gamemode = colorNumber;
         }
-      }
-
-      const currentElement = document.querySelector(`.intro_${introCounter}`);
-      if (currentElement) {
-        currentElement.classList.remove("invisable");
-        introCounter++;
-      }
-      // when we are on intro 5 we have 3 options that each have a color trigger
-      if (introCounter === 6) {
-		const colors = ["red", "green", "yellow"];
-        if (decodedMessage.data.color) {
-          const colorNumber = decodedMessage.data.color;
-          const divElement = document.getElementById(`colorDiv${colorNumber}`);
-          if (divElement) {
-            divElement.style.backgroundColor = colors[colorNumber - 1];
-          }
+        if (nextDivElement) {
+          nextDivElement.style.display = "block"; // Show the next div
         }
       }
     }
-  });
+    if (nextDivElement) {
+      nextDivElement.style.display = "block"; // Show the next div
+      const videoElement = nextDivElement.querySelector("video");
+      if (videoElement) {
+        videoElement.style.display = "block"; // Show the video
+        videoElement.play();
+        console.log("Playing video");
+      }
+      let currentFailIndex = 1; // Initialize the fail index
+
+      if (decodedMessage.data.fail) {
+        const mainVideoElement = document.querySelector("#mainVideo");
+        const failVideoElement = document.querySelector(
+          `#failVideo${currentFailIndex}`,
+        );
+        if (mainVideoElement && failVideoElement) {
+          mainVideoElement.pause(); // Pause the main video
+          failVideoElement.style.display = "block"; // Show the fail video
+          failVideoElement.play(); // Play the fail video
+
+          failVideoElement.addEventListener("ended", () => {
+            failVideoElement.style.display = "none"; // Hide the fail video
+            mainVideoElement.play(); // Resume the main video
+
+            // Increment the fail index, reset to 1 if it exceeds 4
+            currentFailIndex = (currentFailIndex % 4) + 1;
+          });
+        }
+      }
+    }
+  }
+});
