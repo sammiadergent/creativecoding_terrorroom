@@ -1,51 +1,37 @@
 import "./style.css";
 
-const adress = "ws://192.168.100.1:8080";
-let ws = new WebSocket(adress);
-ws.on("open", function open() {
-  console.log("Connected to WebSocket server");
+// Create a new WebSocket.
+var socket = new WebSocket("ws://localhost:8080");
+
+// Connection opened
+socket.addEventListener("open", function (event) {
+  socket.send("Hello Server!");
 });
 
-ws.on("message", (message) => {
-  incoming(message, ws);
-  return false;
+// Listen for messages
+socket.addEventListener("message", function (event) {
+  console.log("Message from server: ", event.data);
 });
 
-// Event handler for WebSocket connection close
-ws.on("close", () => {
-  console.log("WebSocket connection closed");
-  console.log("attempting reconnect");
-  ws.close();
-  ws.terminate();
-  ws = null;
-  setTimeout(() => {
-    ws = initWebsocket(new WebSocket(adress));
-  }, 1000);
-
-  state = STATES.disconnected;
+// Connection closed
+socket.addEventListener("close", function (event) {
+  console.log("Server connection closed: ", event.code);
 });
 
-let currentIntroNum = 1; // Start from 1
+// Connection error
+socket.addEventListener("error", function (event) {
+  console.error("WebSocket error: ", event);
+});
 
-function incoming(message, ws) {
-  const decodedMessage = JSON.parse(message.toString()); // Decode the buffer to obtain the original string
-  console.log("Received message from server:", decodedMessage);
-
-  // Check if the message type is 'select'
-  if (decodedMessage.type === "select") {
-    // Hide the current intro div
-    const currentIntroDiv = document.querySelector(".intro_" + currentIntroNum);
-    if (currentIntroDiv) {
-      currentIntroDiv.classList.remove("visible");
-      currentIntroDiv.classList.add("invisible");
-    }
-
-    // Show the next intro div
-    currentIntroNum++; // Increment the counter
-    const nextIntroDiv = document.querySelector(".intro_" + currentIntroNum);
-    if (nextIntroDiv) {
-      nextIntroDiv.classList.remove("invisible");
-      nextIntroDiv.classList.add("visible");
+//when select message comes in I need to hide the div that is showing called "intro_0" and need to show the div called "intro_1" until intro_5
+socket.addEventListener("message", function (event) {
+  if (event.data.startsWith("select")) {
+    var index = event.data.split("_")[1]; // Get the index from the message data
+    for (var i = 0; i <= 5; i++) {
+      var element = document.getElementById("intro_" + i);
+      if (element) {
+        element.style.display = i == index ? "block" : "none";
+      }
     }
   }
-}
+});
