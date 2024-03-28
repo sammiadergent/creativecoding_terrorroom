@@ -5,6 +5,7 @@ let gamemode = 0;
 let videocounter = 1;
 const videoElement = document.querySelector("#mainVideo");
 const mainvideo = videoElement.querySelector("video");
+const intro = document.querySelector(".intro_0");
 
 // Create a new WebSocket.
 const socket = new WebSocket("ws://192.168.100.1:8080");
@@ -155,13 +156,13 @@ socket.addEventListener("message", (event) => {
     noodstop.classList.remove("invisable");
     if (decodedMessage.type === "select") {
       const outro = document.querySelector(`.outro`);
-      noodstop.classList.add("invisable");
       outro.classList.remove("invisable");
       setTimeout(() => {
         introCounter = 0;
         gamemode = 0;
-        state = states.intro;
-      }, 120000);
+        outro.classList.add("invisable");
+        intro.classList.remove("invisable");
+      }, 5000);
     }
   }
 });
