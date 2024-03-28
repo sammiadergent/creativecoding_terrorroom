@@ -152,12 +152,12 @@ socket.addEventListener("message", (event) => {
   } else if (decodedMessage.type === "stop") {
     mainvideo.pause();
     videoElement.classList.add("invisable");
-    const outro = document.querySelector(`.outro`);
-    outro.classList.remove("invisable");
+    const noodstop = document.querySelector(`.noodstop`);
+    noodstop.classList.remove("invisable");
     setTimeout(() => {
       introCounter = 0;
       gamemode = 0;
-      outro.classList.add("invisable");
+      noodstop.classList.add("invisable");
       intro.classList.remove("invisable");
       console.log("hier zou hij moeten resetten");
     }, 5000);
