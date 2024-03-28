@@ -63,6 +63,7 @@ socket.addEventListener("message", (event) => {
         case 1:
           gamemode = "ASS";
       }
+      console.log(gamemode);
 
       //we starten de video
 
