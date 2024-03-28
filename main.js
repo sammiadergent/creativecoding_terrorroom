@@ -95,6 +95,7 @@ socket.addEventListener("message", (event) => {
           jumpscareElement.classList.add("invisable");
           videoElement.classList.remove("invisable");
           //mainvideo.muted = true;
+          let audio = new Audio(audioFiles[audioCounter]);
           mainvideo.play();
           audio.play();
           audioCounter++;
