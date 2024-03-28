@@ -69,7 +69,7 @@ socket.addEventListener("message", (event) => {
       //we starten de video
 
       videoElement.classList.remove("invisable");
-      mainvideo.muted = true;
+      //mainvideo.muted = true;
       mainvideo.play();
     }
   } else if (decodedMessage.type === "fail") {
@@ -84,7 +84,7 @@ socket.addEventListener("message", (event) => {
       const jumpVideo = jumpscareElement.querySelector("video");
 
       if (jumpVideo) {
-        jumpVideo.muted = true;
+        //jumpVideo.muted = true;
         jumpVideo.play();
         console.log("Parent div ID: " + jumpVideo.parentNode.id);
         videocounter++; // Increment videocounter here
@@ -92,7 +92,7 @@ socket.addEventListener("message", (event) => {
         jumpVideo.addEventListener("ended", () => {
           jumpscareElement.classList.add("invisable");
           videoElement.classList.remove("invisable");
-          mainvideo.muted = true;
+          //mainvideo.muted = true;
           mainvideo.play();
         });
       }
@@ -109,7 +109,7 @@ socket.addEventListener("message", (event) => {
       const jumpVideo = jumpscareElement.querySelector("video");
 
       if (jumpVideo) {
-        jumpVideo.muted = true;
+        //jumpVideo.muted = true;
         jumpVideo.play();
         console.log("Parent div ID: " + jumpVideo.parentNode.id);
         videocounter++; // Increment videocounter here
@@ -117,7 +117,7 @@ socket.addEventListener("message", (event) => {
         jumpVideo.addEventListener("ended", () => {
           jumpscareElement.classList.add("invisable");
           videoElement.classList.remove("invisable");
-          mainvideo.muted = true;
+          //mainvideo.muted = true;
           mainvideo.play();
         });
       }
@@ -135,7 +135,7 @@ socket.addEventListener("message", (event) => {
       const jumpVideo = jumpscareElement.querySelector("video");
 
       if (jumpVideo) {
-        jumpVideo.muted = true;
+        //jumpVideo.muted = true;
         jumpVideo.play();
         console.log("Parent div ID: " + jumpVideo.parentNode.id);
         videocounter++; // Increment videocounter here
@@ -143,7 +143,7 @@ socket.addEventListener("message", (event) => {
         jumpVideo.addEventListener("ended", () => {
           jumpscareElement.classList.add("invisable");
           videoElement.classList.remove("invisable");
-          mainvideo.muted = true;
+          //mainvideo.muted = true;
           mainvideo.play();
         });
       }
