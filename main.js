@@ -143,6 +143,21 @@ socket.addEventListener("message", (event) => {
         mainvideo.play();
       });
     }
+  } else if (decodedMessage.type === "stop") {
+    mainvideo.pause();
+    videoElement.classList.add("invisable");
+    const noodstop = document.querySelector(`.noodstop`);
+    noodstop.classList.remove("invisable");
+    if (decodedMessage.type === "select") {
+      const outro = document.querySelector(`.outro`);
+      noodstop.classList.add("invisable");
+      outro.classList.remove("invisable");
+      setTimeout(() => {
+        introCounter = 0;
+        gamemode = 0;
+        state = states.intro;
+      }, 120000);
+    }
   }
 });
 
