@@ -2,6 +2,7 @@ import "./style.css";
 
 let introCounter = 0;
 let gamemode = 0;
+let videocounter = 1;
 const videoElement = document.querySelector("#mainVideo");
 const mainvideo = videoElement.querySelector("video");
 
@@ -75,15 +76,15 @@ socket.addEventListener("message", (event) => {
       mainvideo.pause();
       videoElement.classList.add("invisable");
 
-      const jumpVideo = videoElement.querySelector("video");
+	  const jumpscareElement = document.querySelector(
+		`#failvideo2_${videocounter}`,
+	  );
+      const jumpVideo = jumpscareElement.querySelector("video");
       if (jumpVideo) {
         jumpVideo.addEventListener("ended", () => {
           videocounter++;
         });
       }
-      const jumpscareElement = document.querySelector(
-        "#failvideo2_${videocounter}",
-      );
       jumpscareElement.classList.remove("invisable");
       jumpVideo.muted = true;
       jumpVideo.play();
