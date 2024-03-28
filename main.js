@@ -81,23 +81,23 @@ socket.addEventListener("message", (event) => {
         `#failvideo2_${videocounter}`,
       );
       const jumpVideo = jumpscareElement.querySelector("video");
+
       if (jumpVideo) {
+        jumpVideo.muted = true;
+        jumpVideo.play();
+        console.log("Parent div ID: " + jumpVideo.parentNode.id);
+        videocounter++; // Increment videocounter here
+
         jumpVideo.addEventListener("ended", () => {
-          videocounter++;
+          jumpscareElement.classList.add("invisable");
+          videoElement.classList.remove("invisable");
+          mainvideo.muted = true;
+          mainvideo.play();
         });
       }
+
       jumpscareElement.classList.remove("invisable");
-      jumpVideo.muted = true;
-      jumpVideo.play();
-      console.log("Parent div ID: " + jumpVideo.parentNode.id);
-      jumpVideo.addEventListener("ended", () => {
-        jumpscareElement.classList.add("invisable");
-        videoElement.classList.remove("invisable");
-        mainvideo.muted = true;
-        mainvideo.play();
-      });
     }
-    console.log("JUMPSCARE");
     if (gamemode === "ASS") {
       mainvideo.pause();
       videoElement.classList.add("invisable");
@@ -132,21 +132,21 @@ socket.addEventListener("message", (event) => {
         `#failvideo3_${videocounter}`,
       );
       const jumpVideo = jumpscareElement.querySelector("video");
+
       if (jumpVideo) {
+        jumpVideo.muted = true;
+        jumpVideo.play();
+        console.log("Parent div ID: " + jumpVideo.parentNode.id);
+        videocounter++; // Increment videocounter here
+
         jumpVideo.addEventListener("ended", () => {
-          videocounter++;
+          jumpscareElement.classList.add("invisable");
+          videoElement.classList.remove("invisable");
+          mainvideo.muted = true;
+          mainvideo.play();
         });
       }
       jumpscareElement.classList.remove("invisable");
-      jumpVideo.muted = true;
-      jumpVideo.play();
-      console.log("Parent div ID: " + jumpVideo.parentNode.id);
-      jumpVideo.addEventListener("ended", () => {
-        jumpscareElement.classList.add("invisable");
-        videoElement.classList.remove("invisable");
-        mainvideo.muted = true;
-        mainvideo.play();
-      });
     }
   } else if (decodedMessage.type === "stop") {
     mainvideo.pause();
