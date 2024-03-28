@@ -112,6 +112,7 @@ socket.addEventListener("message", (event) => {
         `#failvideo1_${videocounter}`,
       );
       const jumpVideo = jumpscareElement.querySelector("video");
+      let audioFiles = ["audio1.m4a", "audio2.m4a", "audio3.m4a", "audio4.m4a"];
 
       if (jumpVideo) {
         //jumpVideo.muted = true;
@@ -124,6 +125,10 @@ socket.addEventListener("message", (event) => {
           videoElement.classList.remove("invisable");
           //mainvideo.muted = true;
           mainvideo.play();
+          let audio = new Audio(audioFiles[audioCounter]);
+          mainvideo.play();
+          audio.play();
+          audioCounter++;
         });
       }
 
@@ -138,6 +143,7 @@ socket.addEventListener("message", (event) => {
         `#failvideo3_${videocounter}`,
       );
       const jumpVideo = jumpscareElement.querySelector("video");
+      let audioFiles = ["audio1.m4a", "audio2.m4a", "audio3.m4a", "audio4.m4a"];
 
       if (jumpVideo) {
         //jumpVideo.muted = true;
@@ -150,6 +156,10 @@ socket.addEventListener("message", (event) => {
           videoElement.classList.remove("invisable");
           //mainvideo.muted = true;
           mainvideo.play();
+          let audio = new Audio(audioFiles[audioCounter]);
+          mainvideo.play();
+          audio.play();
+          audioCounter++;
         });
       }
       jumpscareElement.classList.remove("invisable");
