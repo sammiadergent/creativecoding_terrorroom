@@ -88,7 +88,7 @@ socket.addEventListener("message", (event) => {
       jumpscareElement.classList.remove("invisable");
       jumpVideo.muted = true;
       jumpVideo.play();
-      console.log("Video ID: " + jumpVideo.id);
+      console.log("Parent div ID: " + jumpVideo.parentNode.id);
       jumpVideo.addEventListener("ended", () => {
         jumpscareElement.classList.add("invisable");
         videoElement.classList.remove("invisable");
@@ -113,7 +113,7 @@ socket.addEventListener("message", (event) => {
       jumpscareElement.classList.remove("invisable");
       jumpVideo.muted = true;
       jumpVideo.play();
-      console.log("Video ID: " + jumpVideo.id);
+      console.log("Parent div ID: " + jumpVideo.parentNode.id);
       jumpVideo.addEventListener("ended", () => {
         jumpscareElement.classList.add("invisable");
         videoElement.classList.remove("invisable");
@@ -138,7 +138,7 @@ socket.addEventListener("message", (event) => {
       jumpscareElement.classList.remove("invisable");
       jumpVideo.muted = true;
       jumpVideo.play();
-      console.log("Video ID: " + jumpVideo.id);
+      console.log("Parent div ID: " + jumpVideo.parentNode.id);
       jumpVideo.addEventListener("ended", () => {
         jumpscareElement.classList.add("invisable");
         videoElement.classList.remove("invisable");
