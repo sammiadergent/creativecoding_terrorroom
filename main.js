@@ -101,7 +101,7 @@ socket.addEventListener("message", (event) => {
       videoElement.classList.add("invisable");
 
       const jumpscareElement = document.querySelector(
-        `#failvideo2_${videocounter}`,
+        `#failvideo1_${videocounter}`,
       );
       const jumpVideo = jumpscareElement.querySelector("video");
       if (jumpVideo) {
