@@ -3,7 +3,7 @@ import "./style.css";
 let introCounter = 0;
 let gamemode = 0;
 let videocounter = 1;
-let audioCounter = 0;
+let audioCounter = 1;
 const videoElement = document.querySelector("#mainVideo");
 const mainvideo = videoElement.querySelector("video");
 const intro = document.querySelector(".intro_0");
@@ -89,7 +89,7 @@ socket.addEventListener("message", (event) => {
         jumpVideo.muted = true;
         jumpVideo.play();
         console.log("Parent div ID: " + jumpVideo.parentNode.id);
-        videocounter = (videocounter + 1) % 5; // Increment videocounter here
+        videocounter++; // Increment videocounter here
 
         jumpVideo.addEventListener("ended", () => {
           jumpscareElement.classList.add("invisable");
@@ -97,7 +97,7 @@ socket.addEventListener("message", (event) => {
           mainvideo.muted = true;
           mainvideo.play();
           audio.play();
-          audioCounter = (audioCounter + 1) % audioFiles.length;
+          audioCounter++;
         });
       }
 
