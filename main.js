@@ -162,6 +162,7 @@ socket.addEventListener("message", (event) => {
         gamemode = 0;
         outro.classList.add("invisable");
         intro.classList.remove("invisable");
+        console.log("hier zou hij moeten resetten");
       }, 5000);
     }
   }
