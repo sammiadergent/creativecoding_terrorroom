@@ -3,6 +3,7 @@ import "./style.css";
 let introCounter = 0;
 let gamemode = 0;
 let videocounter = 1;
+let outroCounter = 0;
 const videoElement = document.querySelector("#mainVideo");
 const mainvideo = videoElement.querySelector("video");
 const intro = document.querySelector(".intro_0");
@@ -215,6 +216,7 @@ socket.addEventListener("message", (event) => {
       }
       jumpscareElement.classList.remove("invisable");
     }
+    //hier stoppen de modussen
   } else if (decodedMessage.type === "stop") {
     mainvideo.pause();
     mainvideo.currentTime = 0;
@@ -222,13 +224,31 @@ socket.addEventListener("message", (event) => {
     videoElement.classList.add("invisable");
     const noodstop = document.querySelector(`.noodstop`);
     noodstop.classList.remove("invisable");
-    setTimeout(() => {
-      introCounter = 0;
-      gamemode = 0;
-      videocounter = 1;
-      noodstop.classList.add("invisable");
-      intro.classList.remove("invisable");
-      console.log("hier zou hij moeten resetten");
-    }, 5000);
+  } else if (decodedMessage.type === "select") {
+    noodstop.classList.add("invisable");
+    outro_1.classList.remove("invisable");
+    outroCounter++;
+    if (introCounter > 0) {
+      const prevElement = document.querySelector(`.intro_${introCounter - 1}`);
+      if (prevElement) {
+        prevElement.classList.add("invisable");
+      }
+    }
+
+    const currentElement = document.querySelector(`.intro_${introCounter}`);
+    if (currentElement) {
+      currentElement.classList.remove("invisable");
+    }
+    if (introCounter === 3) {
+      setTimeout(() => {
+        introCounter = 0;
+        outroCounter = 0;
+        gamemode = 0;
+        videocounter = 1;
+        outro_3.classList.add("invisable");
+        intro.classList.remove("invisable");
+        console.log("hier zou hij moeten resetten");
+      }, 5000);
+    }
   }
 });
