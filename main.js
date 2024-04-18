@@ -3,10 +3,54 @@ import "./style.css";
 let introCounter = 0;
 let gamemode = 0;
 let videocounter = 1;
-let audioCounter = 1;
 const videoElement = document.querySelector("#mainVideo");
 const mainvideo = videoElement.querySelector("video");
 const intro = document.querySelector(".intro_0");
+
+//panner
+const audioContext = new AudioContext();
+
+// Function to load an audio file into a buffer
+function loadAudioFile(context, url) {
+  return fetch(url)
+    .then((response) => response.arrayBuffer())
+    .then((arrayBuffer) => context.decodeAudioData(arrayBuffer));
+}
+
+// Function to play a sound with a specific panner value
+function playSound(context, audioBuffer, panValue) {
+  let source = context.createBufferSource();
+  let panner = context.createStereoPanner();
+  source.buffer = audioBuffer;
+  source.connect(panner);
+  panner.connect(context.destination);
+  panner.pan.value = panValue;
+  source.start();
+}
+
+// Load and play a sound
+loadAudioFile(audioContext, "audio1.m4a")
+  .then((audioBuffer) => playSound(audioContext, audioBuffer, 1))
+  .catch((error) => console.error(error));
+
+// audio elementen
+const gameModeAudios = {
+  ADHD: [
+    { file: loadAudioFile(audioContext, "audio1.m4a"), pan: -1 },
+    { file: loadAudioFile(audioContext, "audio2.m4a"), pan: 1 },
+    { file: loadAudioFile(audioContext, "audio3.m4a"), pan: 1 },
+  ],
+  HSP: [
+    { file: loadAudioFile(audioContext, "audio1.m4a"), pan: -1 },
+    { file: loadAudioFile(audioContext, "audio2.m4a"), pan: 1 },
+    { file: loadAudioFile(audioContext, "audio3.m4a"), pan: 1 },
+  ],
+  ASS: [
+    { file: loadAudioFile(audioContext, "audio1.m4a"), pan: -1 },
+    { file: loadAudioFile(audioContext, "audio2.m4a"), pan: 1 },
+    { file: loadAudioFile(audioContext, "audio3.m4a"), pan: -1 },
+  ],
+};
 
 // Create a new WebSocket.
 const socket = new WebSocket("ws://192.168.100.1:8080");
@@ -24,6 +68,11 @@ socket.addEventListener("close", (event) => {
 // Connection error
 socket.addEventListener("error", (event) => {
   console.error("WebSocket error: ", event);
+});
+
+//
+document.getElementById("next").addEventListener("click", function () {
+  document.getElementById("next").classList.add("invisable");
 });
 
 // Listen for messages
@@ -45,14 +94,6 @@ socket.addEventListener("message", (event) => {
       currentElement.classList.remove("invisable");
     }
 
-    if (introCounter === 6) {
-      const colors = { ASS: "red", HSP: "green", ADHD: "yellow" };
-      if (gamemode) {
-        const currentDivElement = (document.getElementById(
-          `colorDiv${colorNumber}`,
-        ).style.backgroundColor = colors[gamemode]);
-      }
-    }
     console.log("introCounter: ", introCounter);
     if (introCounter === 6) {
       switch (decodedMessage.data.color) {
@@ -65,13 +106,37 @@ socket.addEventListener("message", (event) => {
         case 1:
           gamemode = "ASS";
       }
-      console.log(gamemode);
+      console.log("gameMode: " + gamemode);
 
       //we starten de video
 
       videoElement.classList.remove("invisable");
       //mainvideo.muted = true;
       mainvideo.play();
+      setInterval(() => {
+        if (!mainvideo.paused) {
+          // The video is playing
+          // Select a random audio file from the current game mode's audio files
+          const audioFiles = gameModeAudios[gamemode];
+          const audioFile =
+            audioFiles[Math.floor(Math.random() * audioFiles.length)];
+
+          // Log the game mode and the audio file
+          console.log(`Game mode: ${gamemode}, Audio file: ${audioFile}`);
+          console.log(audioFile);
+
+          // Start the promise returned by audioFile.file
+          audioFile.file
+            .then((audioBuffer) => {
+              // Once the audio buffer is loaded, play the sound
+              playSound(audioContext, audioBuffer, audioFile.pan);
+            })
+            .catch((error) => {
+              // Handle any errors that occur during loading the audio file
+              console.error("Error loading audio file:", error);
+            });
+        }
+      }, 5000);
     }
   } else if (decodedMessage.type === "fail") {
     console.log("JUMPSCARE");
@@ -83,7 +148,6 @@ socket.addEventListener("message", (event) => {
         `#failvideo2_${videocounter}`,
       );
       const jumpVideo = jumpscareElement.querySelector("video");
-      let audioFiles = ["audio1.m4a", "audio2.m4a", "audio3.m4a", "audio4.m4a"];
 
       if (jumpVideo) {
         //jumpVideo.muted = true;
@@ -95,10 +159,7 @@ socket.addEventListener("message", (event) => {
           jumpscareElement.classList.add("invisable");
           videoElement.classList.remove("invisable");
           //mainvideo.muted = true;
-          let audio = new Audio(audioFiles[audioCounter]);
           mainvideo.play();
-          audio.play();
-          audioCounter++;
         });
       }
 
@@ -112,7 +173,6 @@ socket.addEventListener("message", (event) => {
         `#failvideo1_${videocounter}`,
       );
       const jumpVideo = jumpscareElement.querySelector("video");
-      let audioFiles = ["audio1.m4a", "audio2.m4a", "audio3.m4a", "audio4.m4a"];
 
       if (jumpVideo) {
         //jumpVideo.muted = true;
@@ -125,10 +185,6 @@ socket.addEventListener("message", (event) => {
           videoElement.classList.remove("invisable");
           //mainvideo.muted = true;
           mainvideo.play();
-          let audio = new Audio(audioFiles[audioCounter]);
-          mainvideo.play();
-          audio.play();
-          audioCounter++;
         });
       }
 
@@ -143,7 +199,6 @@ socket.addEventListener("message", (event) => {
         `#failvideo3_${videocounter}`,
       );
       const jumpVideo = jumpscareElement.querySelector("video");
-      let audioFiles = ["audio1.m4a", "audio2.m4a", "audio3.m4a", "audio4.m4a"];
 
       if (jumpVideo) {
         //jumpVideo.muted = true;
@@ -156,91 +211,24 @@ socket.addEventListener("message", (event) => {
           videoElement.classList.remove("invisable");
           //mainvideo.muted = true;
           mainvideo.play();
-          let audio = new Audio(audioFiles[audioCounter]);
-          mainvideo.play();
-          audio.play();
-          audioCounter++;
         });
       }
       jumpscareElement.classList.remove("invisable");
     }
   } else if (decodedMessage.type === "stop") {
     mainvideo.pause();
+    mainvideo.currentTime = 0;
+    console.log(mainvideo.currentTime);
     videoElement.classList.add("invisable");
     const noodstop = document.querySelector(`.noodstop`);
     noodstop.classList.remove("invisable");
     setTimeout(() => {
       introCounter = 0;
       gamemode = 0;
+      videocounter = 1;
       noodstop.classList.add("invisable");
       intro.classList.remove("invisable");
       console.log("hier zou hij moeten resetten");
     }, 5000);
   }
 });
-
-//   if (decodedMessage.type === "select") {
-//     if (introCounter > 0) {
-//       const prevElement = document.querySelector(`.intro_${introCounter - 1}`);
-//       if (prevElement) {
-//         prevElement.classList.add("invisable");
-//       }
-//     }
-
-//     const currentElement = document.querySelector(`.intro_${introCounter}`);
-//     if (currentElement) {
-//       currentElement.classList.remove("invisable");
-//       introCounter++;
-//     }
-//     // when we are on intro 5 we have 3 options that each have a color trigger
-//     const nextDivElement = document.getElementById(
-//       `colorDiv${colorNumber + 1}`,
-//     );
-//     if (introCounter === 6) {
-//       const colors = ["red", "green", "yellow"];
-//       if (decodedMessage.data.color) {
-//         const colorNumber = decodedMessage.data.color;
-//         const currentDivElement = document.getElementById(
-//           `colorDiv${colorNumber}`,
-//         );
-
-//         if (currentDivElement) {
-//           currentDivElement.style.backgroundColor = colors[colorNumber - 1];
-//           currentDivElement.style.display = "none"; // Hide the current div
-//           gamemode = colorNumber;
-//         }
-//         if (nextDivElement) {
-//           nextDivElement.style.display = "block"; // Show the next div
-//         }
-//       }
-//     }
-//     if (nextDivElement) {
-//       nextDivElement.style.display = "block"; // Show the next div
-//       const videoElement = document.querySelector("video");
-//       if (videoElement) {
-//         videoElement.style.display = "block"; // Show the video
-//         videoElement.play();
-//       }
-//       let currentFailIndex = 1; // Initialize the fail index
-
-//       if (decodedMessage.type.fail) {
-//         const mainVideoElement = document.querySelector("#mainVideo");
-//         const failVideoElement = document.querySelector(
-//           `#failVideo${gamemode}_${currentFailIndex}`,
-//         );
-//         if (mainVideoElement && failVideoElement) {
-//           mainVideoElement.pause(); // Pause the main video
-//           failVideoElement.style.display = "block"; // Show the fail video
-//           failVideoElement.play(); // Play the fail video
-
-//           failVideoElement.addEventListener("ended", () => {
-//             failVideoElement.style.display = "none"; // Hide the fail video
-//             mainVideoElement.play(); // Resume the main video
-
-//             // Increment the fail index, reset to 1 if it exceeds 4
-//             currentFailIndex = (currentFailIndex % 4) + 1;
-//           });
-//         }
-//       }
-//     }
-//   }
