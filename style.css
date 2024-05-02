@@ -5,6 +5,10 @@
   -moz-osx-font-smoothing: grayscale;
   color: #fff;
 }
+body {
+  overflow: hidden;
+  margin: 0;
+}
 
 button {
   border-radius: 8px;
@@ -34,7 +38,7 @@ button:focus-visible {
 
 .h1 {
   font-family: "IBM Plex Mono";
-  font-size: 150px;
+  font-size: 40px;
   font-style: normal;
   font-weight: 700;
   line-height: normal;
@@ -51,7 +55,7 @@ button:focus-visible {
 }
 .h2 {
   font-family: "IBM Plex Mono";
-  font-size: 50px;
+  font-size: 24px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
@@ -60,14 +64,19 @@ button:focus-visible {
 }
 .body {
   font-family: "IBM Plex Mono";
-  font-size: 80px;
+  font-size: 36px;
   font-style: normal;
   font-weight: 300;
   line-height: normal;
   text-align: center;
 }
 .waarschuwing {
-  height: 400px;
+  height: 160px;
+  padding-bottom: 20px;
+}
+.noodstop {
+  height: 130px;
+  padding-bottom: 15px;
 }
 #next {
   position: fixed;
@@ -98,15 +107,18 @@ button:focus-visible {
 }
 .buttonsuitleg {
   position: relative;
-  bottom: -5%;
+  bottom: 0;
 }
 .grotestuktekst {
   width: 80%;
 }
 .keuzebol {
   position: relative;
-  width: 100px;
+  width: 40px;
   left: 70%;
+}
+.optiesmodus {
+  padding-top: 80px;
 }
 .left {
   text-align: left;
@@ -133,8 +145,23 @@ video {
   align-items: center;
 }
 .mensen {
-  height: 250px;
+  height: 150px;
   padding-bottom: 50px;
+}
+#locatie_1 {
+  padding-bottom: 50px;
+}
+#buttonsuitleg_1 {
+  position: relative;
+  bottom: -15%;
+}
+#buttonsuitleg_2 {
+  position: relative;
+  bottom: -5%;
+}
+#buttonsuitleg_3 {
+  position: relative;
+  bottom: -10%;
 }
 
 .invisable {
