@@ -278,7 +278,7 @@ socket.addEventListener("message", (event) => {
       outro1.classList.add("invisable");
       setTimeout(() => {
         outroCounter = 0;
-        outroCounter = 0;
+        introCounter = 0;
         gamemode = 0;
         videocounter = 1;
         const outro_3 = document.querySelector(`.outro_3`);
