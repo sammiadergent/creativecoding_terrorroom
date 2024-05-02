@@ -3,6 +3,7 @@ import "./style.css";
 let introCounter = 0;
 let gamemode = 0;
 let videocounter = 1;
+let outroCounter = 0;
 const videoElement = document.querySelector("#mainVideo");
 const mainvideo = videoElement.querySelector("video");
 const intro = document.querySelector(".intro_0");
@@ -36,19 +37,51 @@ loadAudioFile(audioContext, "audio1.m4a")
 // audio elementen
 const gameModeAudios = {
   ADHD: [
-    { file: loadAudioFile(audioContext, "audio1.m4a"), pan: -1 },
-    { file: loadAudioFile(audioContext, "audio2.m4a"), pan: 1 },
-    { file: loadAudioFile(audioContext, "audio3.m4a"), pan: 1 },
+    { file: loadAudioFile(audioContext, "adhd_1.m4a"), pan: -1 },
+    { file: loadAudioFile(audioContext, "adhd_2.m4a"), pan: 1 },
+    { file: loadAudioFile(audioContext, "adhd_3.m4a"), pan: -1 },
+    { file: loadAudioFile(audioContext, "adhd_4.m4a"), pan: 1 },
+    { file: loadAudioFile(audioContext, "random_1.mp3"), pan: -1 },
+    { file: loadAudioFile(audioContext, "random_2.mp3"), pan: 1 },
+    { file: loadAudioFile(audioContext, "random_3.mp3"), pan: -1 },
+    { file: loadAudioFile(audioContext, "random_4.mp3"), pan: 1 },
+    { file: loadAudioFile(audioContext, "random_5.mp3"), pan: -1 },
+    { file: loadAudioFile(audioContext, "random_6.mp3"), pan: -1 },
+    { file: loadAudioFile(audioContext, "random_7.mp3"), pan: 1 },
+    { file: loadAudioFile(audioContext, "random_8.mp3"), pan: -1 },
+    { file: loadAudioFile(audioContext, "random_9.mp3"), pan: 1 },
+    { file: loadAudioFile(audioContext, "random_10.mp3"), pan: -1 },
   ],
   HSP: [
-    { file: loadAudioFile(audioContext, "audio1.m4a"), pan: -1 },
-    { file: loadAudioFile(audioContext, "audio2.m4a"), pan: 1 },
-    { file: loadAudioFile(audioContext, "audio3.m4a"), pan: 1 },
+    { file: loadAudioFile(audioContext, "hsp_1.m4a"), pan: -1 },
+    { file: loadAudioFile(audioContext, "hsp_2.m4a"), pan: 1 },
+    { file: loadAudioFile(audioContext, "hsp_3.m4a"), pan: -1 },
+    { file: loadAudioFile(audioContext, "hsp_4.m4a"), pan: 1 },
+    { file: loadAudioFile(audioContext, "random_1.mp3"), pan: -1 },
+    { file: loadAudioFile(audioContext, "random_2.mp3"), pan: 1 },
+    { file: loadAudioFile(audioContext, "random_3.mp3"), pan: -1 },
+    { file: loadAudioFile(audioContext, "random_4.mp3"), pan: 1 },
+    { file: loadAudioFile(audioContext, "random_5.mp3"), pan: -1 },
+    { file: loadAudioFile(audioContext, "random_6.mp3"), pan: 1 },
+    { file: loadAudioFile(audioContext, "random_7.mp3"), pan: -1 },
+    { file: loadAudioFile(audioContext, "random_8.mp3"), pan: 1 },
+    { file: loadAudioFile(audioContext, "random_9.mp3"), pan: -1 },
+    { file: loadAudioFile(audioContext, "random_10.mp3"), pan: 1 },
   ],
   ASS: [
-    { file: loadAudioFile(audioContext, "audio1.m4a"), pan: -1 },
-    { file: loadAudioFile(audioContext, "audio2.m4a"), pan: 1 },
-    { file: loadAudioFile(audioContext, "audio3.m4a"), pan: -1 },
+    { file: loadAudioFile(audioContext, "ass_1.m4a"), pan: -1 },
+    { file: loadAudioFile(audioContext, "ass_2.m4a"), pan: 1 },
+    { file: loadAudioFile(audioContext, "ass_3.m4a"), pan: -1 },
+    { file: loadAudioFile(audioContext, "random_1.mp3"), pan: 1 },
+    { file: loadAudioFile(audioContext, "random_2.mp3"), pan: -1 },
+    { file: loadAudioFile(audioContext, "random_3.mp3"), pan: 1 },
+    { file: loadAudioFile(audioContext, "random_4.mp3"), pan: -1 },
+    { file: loadAudioFile(audioContext, "random_5.mp3"), pan: 1 },
+    { file: loadAudioFile(audioContext, "random_6.mp3"), pan: -1 },
+    { file: loadAudioFile(audioContext, "random_7.mp3"), pan: 1 },
+    { file: loadAudioFile(audioContext, "random_8.mp3"), pan: -1 },
+    { file: loadAudioFile(audioContext, "random_9.mp3"), pan: 1 },
+    { file: loadAudioFile(audioContext, "random_10.mp3"), pan: -1 },
   ],
 };
 
@@ -215,6 +248,7 @@ socket.addEventListener("message", (event) => {
       }
       jumpscareElement.classList.remove("invisable");
     }
+    //hier stoppen de modussen
   } else if (decodedMessage.type === "stop") {
     mainvideo.pause();
     mainvideo.currentTime = 0;
@@ -222,13 +256,39 @@ socket.addEventListener("message", (event) => {
     videoElement.classList.add("invisable");
     const noodstop = document.querySelector(`.noodstop`);
     noodstop.classList.remove("invisable");
-    setTimeout(() => {
-      introCounter = 0;
-      gamemode = 0;
-      videocounter = 1;
-      noodstop.classList.add("invisable");
-      intro.classList.remove("invisable");
-      console.log("hier zou hij moeten resetten");
-    }, 5000);
+  } else if (decodedMessage.type === "oselect") {
+    const noodstop = document.querySelector(`.noodstop`);
+    const outro_1 = document.querySelector(`.outro_1`);
+    noodstop.classList.add("invisable");
+    outro_1.classList.remove("invisable");
+    outroCounter++;
+    if (outroCounter > 0) {
+      const prevElement = document.querySelector(`.outro_${outroCounter - 1}`);
+      if (prevElement) {
+        prevElement.classList.add("invisable");
+      }
+    }
+    const currentElement = document.querySelector(`.outro_${outroCounter}`);
+    if (currentElement) {
+      currentElement.classList.remove("invisable");
+    }
+    if (outroCounter === 3) {
+      console.log("hier komt hij in de select state");
+      const outro1 = document.querySelector(`.outro_1`);
+      outro1.classList.add("invisable");
+      setTimeout(() => {
+        outroCounter = 0;
+        outroCounter = 0;
+        gamemode = 0;
+        videocounter = 1;
+        const outro_3 = document.querySelector(`.outro_3`);
+        const intro = document.querySelector(`.intro_0`);
+        const outro1 = document.querySelector(`.outro_1`);
+        outro1.classList.add("invisable");
+        outro_3.classList.add("invisable");
+        intro.classList.remove("invisable");
+        console.log("hier zou hij moeten resetten");
+      }, 5000);
+    }
   }
 });

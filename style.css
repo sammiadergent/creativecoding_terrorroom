@@ -1,16 +1,9 @@
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: blue;
-  background-color: white;
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  color: #fff;
 }
 
 button {
@@ -30,6 +23,118 @@ button:hover {
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
+}
+
+.achtergrond {
+  height: 100dvh;
+  width: 100dvw;
+  position: fixed;
+  z-index: -1;
+}
+
+.h1 {
+  font-family: "IBM Plex Mono";
+  font-size: 150px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  text-align: center;
+}
+.h3 {
+  font-family: "IBM Plex Mono";
+  font-size: 100px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  text-align: center;
+  padding-bottom: 100px;
+}
+.h2 {
+  font-family: "IBM Plex Mono";
+  font-size: 50px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  text-align: center;
+  padding: 30px;
+}
+.body {
+  font-family: "IBM Plex Mono";
+  font-size: 80px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: normal;
+  text-align: center;
+}
+.waarschuwing {
+  height: 400px;
+}
+#next {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  margin: 10px;
+}
+.parent {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  width: 100dvw;
+  justify-content: center;
+  align-items: center;
+}
+.bolleparent {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+.keuzeparent {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: end;
+  padding-bottom: 30px;
+}
+.buttonsuitleg {
+  position: relative;
+  bottom: -5%;
+}
+.grotestuktekst {
+  width: 80%;
+}
+.keuzebol {
+  position: relative;
+  width: 100px;
+  left: 70%;
+}
+.left {
+  text-align: left;
+}
+video {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  min-width: 100%;
+  min-height: 100%;
+  object-fit: fill;
+}
+.uitleggrid {
+  width: 80%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+.uitlegcontent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.mensen {
+  height: 250px;
+  padding-bottom: 50px;
 }
 
 .invisable {
