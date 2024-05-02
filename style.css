@@ -163,6 +163,10 @@ video {
   position: relative;
   bottom: -10%;
 }
+#uitlegVideo {
+  height: 280px;
+  padding-top: 20px;
+}
 
 .invisable {
   display: none;

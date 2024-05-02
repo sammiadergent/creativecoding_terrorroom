@@ -292,3 +292,23 @@ socket.addEventListener("message", (event) => {
     }
   }
 });
+
+// Array of image paths
+let images = [];
+for (let i = 0; i <= 479; i++) {
+  let paddedNumber = String(i).padStart(5, "0");
+  images.push(`instructie/2324_CC_TeamTerror_uitlegPNGs_${paddedNumber}.png`);
+}
+
+// Get the image element
+let imgElement = document.getElementById("uitlegVideo");
+
+// Function to change image
+let index = 0;
+function changeImage() {
+  imgElement.src = images[index];
+  index = (index + 1) % images.length; // Loop back to the first image when reaching the end
+}
+
+// Call the function every 1 second (1000 milliseconds)
+setInterval(changeImage, 40);
