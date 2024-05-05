@@ -306,8 +306,10 @@ let imgElement = document.getElementById("uitlegVideo");
 // Function to change image
 let index = 0;
 function changeImage() {
-  imgElement.src = images[index];
-  index = (index + 1) % images.length; // Loop back to the first image when reaching the end
+	if (introCounter === 2) {
+		imgElement.src = images[index];
+		index = (index + 1) % images.length; // Loop back to the first image when reaching the end
+	}
 }
 
 // Call the function every 1 second (1000 milliseconds)
