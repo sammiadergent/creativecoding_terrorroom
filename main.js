@@ -186,7 +186,10 @@ socket.addEventListener("message", (event) => {
         //jumpVideo.muted = true;
         jumpVideo.play();
         console.log("Parent div ID: " + jumpVideo.parentNode.id);
-        videocounter++; // Increment videocounter here
+        videocounter++;
+        if (videocounter >= 8) {
+          videocounter = 1;
+        } // Increment videocounter here
 
         jumpVideo.addEventListener("ended", () => {
           jumpscareElement.classList.add("invisable");
@@ -211,7 +214,10 @@ socket.addEventListener("message", (event) => {
         //jumpVideo.muted = true;
         jumpVideo.play();
         console.log("Parent div ID: " + jumpVideo.parentNode.id);
-        videocounter++; // Increment videocounter here
+        videocounter++;
+        if (videocounter >= 5) {
+          videocounter = 1;
+        } // Increment videocounter here
 
         jumpVideo.addEventListener("ended", () => {
           jumpscareElement.classList.add("invisable");
@@ -237,7 +243,10 @@ socket.addEventListener("message", (event) => {
         //jumpVideo.muted = true;
         jumpVideo.play();
         console.log("Parent div ID: " + jumpVideo.parentNode.id);
-        videocounter++; // Increment videocounter here
+        videocounter++;
+        if (videocounter >= 9) {
+          videocounter = 1;
+        } // Increment videocounter here
 
         jumpVideo.addEventListener("ended", () => {
           jumpscareElement.classList.add("invisable");
@@ -306,10 +315,10 @@ let imgElement = document.getElementById("uitlegVideo");
 // Function to change image
 let index = 0;
 function changeImage() {
-	if (introCounter === 2) {
-		imgElement.src = images[index];
-		index = (index + 1) % images.length; // Loop back to the first image when reaching the end
-	}
+  if (introCounter === 2) {
+    imgElement.src = images[index];
+    index = (index + 1) % images.length; // Loop back to the first image when reaching the end
+  }
 }
 
 // Call the function every 1 second (1000 milliseconds)
