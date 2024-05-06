@@ -215,7 +215,7 @@ socket.addEventListener("message", (event) => {
         jumpVideo.play();
         console.log("Parent div ID: " + jumpVideo.parentNode.id);
         videocounter++;
-        if (videocounter >= 5) {
+        if (videocounter >= 4) {
           videocounter = 1;
         } // Increment videocounter here
 
