@@ -297,7 +297,7 @@ socket.addEventListener("message", (event) => {
         outro_3.classList.add("invisable");
         intro.classList.remove("invisable");
         console.log("hier zou hij moeten resetten");
-      }, 5000);
+      }, 0);
     }
   }
 });
